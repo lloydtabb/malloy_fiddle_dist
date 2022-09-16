@@ -5,9 +5,9 @@ browser and web server.
 
 ## Example Fiddles
 
-[NTSB Example data](https://looker-open-source.github.io/malloy/fiddle/index.html?q=12+-+Line+Chart+with+two+dimension%3A+Flights+by+Month+and+Length&m=Flights&t=)
+[NTSB Example Fiddle](https://looker-open-source.github.io/malloy/fiddle/index.html?q=12+-+Line+Chart+with+two+dimension%3A+Flights+by+Month+and+Length&m=Flights&t=)
 
-IMDB Fiddle - [Github Repository](https://github.com/lloydtabb/imdb_malloy)  [Fiddle](https://lloydtabb.github.io/imdb_fiddle/index.html)
+[IMDB Fiddle](https://lloydtabb.github.io/imdb_fiddle/index.html) - [Github Repository](https://github.com/lloydtabb/imdb_fiddle) 
 
 ## Making a Fiddle
 
