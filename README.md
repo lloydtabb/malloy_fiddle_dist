@@ -10,13 +10,13 @@ Github allows you to host web pages so it is perfect for this.  You can create a
 
 Here are some examples running on Github
 
-[NTSB Example data](https://looker-open-source.github.io/malloy/fiddle/index.html?q=12+-+Line+Chart+with+two+dimension%3A+Flights+by+Month+and+Length&m=Flights&t=)
+[NTSB Example Fiddle](https://looker-open-source.github.io/malloy/fiddle/index.html?q=12+-+Line+Chart+with+two+dimension%3A+Flights+by+Month+and+Length&m=Flights&t=)
 
-IMDB Fiddle - [Github Repository](https://github.com/lloydtabb/imdb_malloy)  [Fiddle](https://lloydtabb.github.io/imdb_fiddle/index.html)
+[IMDB Fiddle](https://lloydtabb.github.io/imdb_fiddle/index.html) - [Github Repository](https://github.com/lloydtabb/imdb_fiddle) 
 
 ## Making a Fiddle
 
-  * Load VScode and Intall the extension - (Goto Instructions)[https://github.com/looker-open-source/malloy/#readme}]
+  * Load VScode and Intall the extension - [Goto Instructions](https://github.com/looker-open-source/malloy/#readme)
   * Find some *parquet* or *csv* data and make a new Malloy Model
   * Create a separate Malloy file for queries using an `import`
   * download [samples.json](samples.json) and edit it.
