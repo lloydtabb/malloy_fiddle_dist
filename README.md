@@ -12,7 +12,10 @@ Here are some examples running on Github
 
 [NTSB Example Fiddle](https://looker-open-source.github.io/malloy/fiddle/index.html?q=12+-+Line+Chart+with+two+dimension%3A+Flights+by+Month+and+Length&m=Flights&t=)
 
-[IMDB Fiddle](https://lloydtabb.github.io/imdb_fiddle/index.html) - [Github Repository](https://github.com/lloydtabb/imdb_fiddle) 
+[IMDB Fiddle](https://lloydtabb.github.io/imdb_fiddle/index.html) -- [Source Code in Github Repository](https://github.com/lloydtabb/imdb_fiddle) 
+
+[Baby Names Fiddle](https://lloydtabb.github.io/name_fiddle/index.html) -- [Source Code in Github Repository](https://github.com/lloydtabb/name_fiddle) 
+
 
 ## Making a Fiddle using Github Pages
 
