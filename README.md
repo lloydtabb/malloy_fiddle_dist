@@ -1,6 +1,6 @@
 # Malloy Fiddle
 
-Malloy Fiddle allows you to build a web page to play with a data set. My simply copying a couple of files (index.html and samples.json) into a directory on a web server along with some data and some Malloy semantic models, you can run queries using your web browser as an analytic tool.
+Malloy Fiddle allows you to build a web page to play with a data set. By simply copying a couple of files (index.html and samples.json) into a directory on a web server along with some data and some Malloy semantic models, you can run queries using your web browser as an analytic tool.
 
 Malloy Fiddle is implemented in Malloy, DuckDB+WASM.  The javascript program is loaded from this repository the data is served from your webserver.
 
@@ -14,7 +14,7 @@ Here are some examples running on Github
 
 [IMDB Fiddle](https://lloydtabb.github.io/imdb_fiddle/index.html) - [Github Repository](https://github.com/lloydtabb/imdb_fiddle) 
 
-## Making a Fiddle
+## Making a Fiddle using Github Pages
 
   * Load VScode and Intall the extension - [Goto Instructions](https://github.com/looker-open-source/malloy/#readme)
   * Find some *parquet* or *csv* data and make a new Malloy Model
