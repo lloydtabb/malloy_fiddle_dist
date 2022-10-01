@@ -1,7 +1,7 @@
 [
   {
     "name": "Filesystem Summary",
-    "dataTables": ["files.csv"],
+    "dataTables": ["f.csv"],
     "modelPath": "./files.malloy",
     "queryPath": "./files-queries.malloy"
   }
