@@ -1,0 +1,5 @@
+import "files.malloy"
+
+// --
+// Name: slow but works
+query: directories_and_children -> with_sizes

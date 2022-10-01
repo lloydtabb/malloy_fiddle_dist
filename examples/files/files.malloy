@@ -1,0 +1,23 @@
+
+source: files_table is table('duckdb:f.csv') {
+
+  rename: file_name is column0
+  rename: file_size is column1
+  dimension: is_dir is column2 = 'd'
+}
+
+source: files is files_table + {where:  not is_dir}
+
+source: directories is files_table { 
+  where: is_dir 
+}
+  
+source: directories_and_children is directories {
+  // first part of the string matches
+  join_cross: files on files.file_name ~ concat(file_name, '%')
+
+  query: with_sizes is {
+    group_by: file_name
+    aggregate: total_size is files.file_size.sum()
+  }
+}
