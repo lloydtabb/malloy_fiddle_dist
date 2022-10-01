@@ -1,5 +1,11 @@
 [
   {
+    "name": "Filesystem Better",
+    "dataTables": ["f.csv"],
+    "modelPath": "./files-again.malloy",
+    "queryPath": "./files-queries.malloy"
+  },
+  {
     "name": "Filesystem Summary",
     "dataTables": ["f.csv"],
     "modelPath": "./files.malloy",

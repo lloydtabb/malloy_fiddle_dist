@@ -1,0 +1,65 @@
+
+source: files_table is table('duckdb:f.csv') {
+
+  rename: file_name is column0
+  rename: file_size is column1
+  dimension: is_dir is column2 = 'd'
+  dimension: parent is reverse(substr(reverse(file_name),
+    instr(reverse(file_name),'/')))::string
+  measure: total_size is file_size.sum()
+
+  query: files is {
+    where: not is_dir
+    project: file_name, file_size, parent
+  }
+
+  query: dirs is {
+    group_by: 
+      file_name is parent
+    aggregate: size is total_size
+    order_by: size desc
+  }
+}
+
+query: dirs_with_size is from(files_table->dirs) -> {
+  // first part of the string matches
+  join_many: parent_dir is from(files_table->dirs) on 
+    file_name ~ concat(parent_dir.file_name, '%')
+     and file_name != parent_dir.file_name
+    
+  group_by: 
+    dir_name is parent_dir.file_name
+    local_size is parent_dir.size
+  aggregate: 
+    nested_size is size.sum()
+  
+}
+
+source: files is from(->dirs_with_size) {
+  join_many: files is from(files_table->files) on 
+    dir_name = files.parent
+
+  measure:
+    file_count is files.count()
+    total_file_size is files.file_size.sum()
+
+  query: largest_directories is {
+    project: dir_name, nested_size
+    order_by: nested_size desc
+  }
+
+  query: largest_directries_biggest_files is {
+    group_by: dir_name, local_size
+    order_by: 2 desc
+    nest: big_files is {
+      group_by: files.file_name, files.file_size
+      order_by: 2 desc
+      limit: 5
+    }
+  }
+
+  query: by_file is {
+    group_by: files.file_name, files.file_size
+    order_by: 2 desc
+  }
+}
