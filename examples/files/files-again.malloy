@@ -38,7 +38,7 @@ query: dirs_with_size is from(files_table->dirs) -> {
     nested_size is size
 } -> {
   group_by: dir_name, local_size
-  aggregate: nested_size is nested_size.sum() + local_size.sum()
+  aggregate: nested_size is nested_size.sum() + max(local_size)
 }
 
 source: files is from(->dirs_with_size) {
