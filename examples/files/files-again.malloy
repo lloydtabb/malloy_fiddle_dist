@@ -1,4 +1,8 @@
-
+//
+// create f.csv with
+// 
+//  find .  -printf "%p,%k,%y\n" > f.csv
+//
 source: files_table is table('duckdb:f.csv') {
 
   rename: file_name is column0
