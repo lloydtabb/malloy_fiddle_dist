@@ -27,12 +27,14 @@ query: dirs_with_size is from(files_table->dirs) -> {
     file_name ~ concat(parent_dir.file_name, '%')
      and file_name != parent_dir.file_name
     
-  group_by: 
+  project: 
     dir_name is parent_dir.file_name
     local_size is parent_dir.size
-  aggregate: 
-    nested_size is size.sum()
-  
+    nested_name is file_name
+    nested_size is size
+} -> {
+  group_by: dir_name, local_size
+  aggregate: nested_size is nested_size.sum() + local_size.sum()
 }
 
 source: files is from(->dirs_with_size) {
