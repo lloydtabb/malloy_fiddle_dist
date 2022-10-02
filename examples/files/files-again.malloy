@@ -10,7 +10,10 @@ source: files_table is table('duckdb:f.csv') {
   dimension: is_dir is column2 = 'd'
   dimension: parent is reverse(substr(reverse(file_name),
     instr(reverse(file_name),'/')))::string
+  dimension: extension is regexp_extract(file_name, '[^/]\.([^.]*)$',1)
+  dimension: depth is length(regexp_replace(file_name, '[^/]','','g'))::number
   measure: total_size is file_size.sum()
+  measure: file_count is count()
 
   query: files is {
     where: not is_dir
@@ -20,7 +23,9 @@ source: files_table is table('duckdb:f.csv') {
   query: dirs is {
     group_by: 
       file_name is parent
-    aggregate: size is total_size
+    aggregate: 
+      size is total_size
+      file_count
     order_by: size desc
   }
 }
@@ -36,36 +41,49 @@ query: dirs_with_size is from(files_table->dirs) -> {
     local_size is parent_dir.size
     nested_name is file_name
     nested_size is size
+    nested_file_count is file_count
 } -> {
   group_by: dir_name, local_size
-  aggregate: nested_size is nested_size.sum() + max(local_size)
+  aggregate: 
+    nested_size is nested_size.sum() + max(local_size)
+    nested_file_count is nested_file_count.sum()
 }
 
-source: files is from(->dirs_with_size) {
-  join_many: files is from(files_table->files) on 
-    dir_name = files.parent
-
-  measure:
-    file_count is files.count()
-    total_file_size is files.file_size.sum()
+source: files is files_table {
+  join_one: dir is from(->dirs_with_size) on 
+    parent = dir.dir_name
 
   query: largest_directories is {
-    project: dir_name, nested_size
+    group_by: 
+      dir.dir_name
+      dir.nested_size
+      dir.nested_file_count
+      depth
+    aggregate: file_count
     order_by: nested_size desc
   }
 
   query: largest_directries_biggest_files is {
-    group_by: dir_name, local_size
+    group_by: parent
+    aggregate: total_size
     order_by: 2 desc
     nest: big_files is {
-      group_by: files.file_name, files.file_size
+      group_by: file_name, file_size
       order_by: 2 desc
       limit: 5
     }
   }
 
   query: by_file is {
-    group_by: files.file_name, files.file_size
+    where: not is_dir
+    group_by: file_name, file_size, depth
     order_by: 2 desc
+  }
+
+  query: by_extension is {
+    group_by: extension
+    aggregate: 
+      file_count
+      total_size
   }
 }

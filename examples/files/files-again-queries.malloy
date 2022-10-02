@@ -14,7 +14,7 @@ query: files_table -> dirs
 // Name: directories with nested sizes
 
 query: files-> {
-  project: dir_name, local_size, nested_size
+  project: dir.dir_name, dir.local_size, dir.nested_size
   order_by: nested_size desc
 }
 
@@ -34,17 +34,18 @@ query: files-> largest_directries_biggest_files
 // Name: largest_directries_biggest_ in typescript
 
 query: files-> largest_directries_biggest_files {
-  where: dir_name ~ './node_modules/typescript%'
+  where: parent ~ './node_modules/typescript%'
 }
 
 // --
 // Name: most typescript files
 
 query: files ->  {
-  where: files.file_name ~ '.%ts'
-  group_by: dir_name
+  where: extension = 'ts'
+  group_by: parent
   aggregate: 
     file_count 
-    total_file_size
+    total_size
+    avg_size is file_size.avg()
   nest: by_file + {limit: 10}
 }
