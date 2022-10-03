@@ -11,6 +11,7 @@ source: files_table is table('duckdb:f.csv') {
   dimension: parent is reverse(substr(reverse(file_name),
     instr(reverse(file_name),'/')))::string
   dimension: extension is regexp_extract(file_name, '[^/]\.([^.]*)$',1)
+  dimension: short_name is regexp_extract(file_name, '/([^/]*)$',1)
   dimension: depth is length(regexp_replace(file_name, '[^/]','','g'))::number
   measure: total_size is file_size.sum()
   measure: file_count is count()
@@ -30,45 +31,56 @@ source: files_table is table('duckdb:f.csv') {
   }
 }
 
-query: dirs_with_size is from(files_table->dirs) -> {
+query: parents is from(files_table->dirs) -> {
+
   // first part of the string matches
   join_many: parent_dir is from(files_table->dirs) on 
     file_name ~ concat(parent_dir.file_name, '%')
      and file_name != parent_dir.file_name
-    
+
+  declare:
+    tail is str_split(regexp_replace(file_name, parent_dir.file_name, ''),'/')
+    depth_from_parent is length(tail)::number
+
   project: 
-    dir_name is parent_dir.file_name
-    local_size is parent_dir.size
-    nested_name is file_name
-    nested_size is size
-    nested_file_count is file_count
-} -> {
-  group_by: dir_name, local_size
-  aggregate: 
-    nested_size is nested_size.sum() + max(local_size)
-    nested_file_count is nested_file_count.sum()
-}
+    parent_name is parent_dir.file_name
+    parent_size is parent_dir.size
+    file_name
+    size
+    file_count
+    tail
+    depth_from_parent
+} 
 
 source: files is files_table {
-  join_one: dir is from(->dirs_with_size) on 
-    parent = dir.dir_name
+  // join_one: dir is from(->dirs_with_size) on 
+  //   parent = dir.dir_name
+
+  join_many: parents is from(->parents) on 
+    parent = parents.file_name
+
+  // number of levels down from the parent dir.
+  declare: 
+    dir1 is list_element(parents.tail,1)
+    dir2 is list_element(parents.tail,2)
+    dir3 is list_element(parents.tail,3)
+    dir4 is list_element(parents.tail,4)
 
   query: largest_directories is {
-    group_by: 
-      dir.dir_name
-      dir.nested_size
-      dir.nested_file_count
-      depth
-    aggregate: file_count
-    order_by: nested_size desc
+    group_by: parents.parent_name
+    aggregate: 
+      nested_size is total_size
+      nest_file_count is file_count
   }
 
-  query: largest_directries_biggest_files is {
+  query: top_files_by_dir is {
     group_by: parent
-    aggregate: total_size
+    aggregate: 
+      total_size
+      file_count
     order_by: 2 desc
     nest: big_files is {
-      group_by: file_name, file_size
+      group_by: short_name, file_size
       order_by: 2 desc
       limit: 5
     }
@@ -80,10 +92,45 @@ source: files is files_table {
     order_by: 2 desc
   }
 
+  query: by_file2 is {
+    where: not is_dir
+    group_by: short_name, file_size, depth
+    order_by: 2 desc
+  }
+
   query: by_extension is {
     group_by: extension
     aggregate: 
       file_count
       total_size
+    limit: 10
+  }
+
+  // set a filter on where you would like the query to start
+  //   where: parents.parent_name = './packages/'
+  query: tree_view is {    
+     where: parents.parent_name = './packages/'
+    group_by: dir is dir1
+    aggregate: file_count, total_size
+    nest: sub_dirs is {
+      group_by: dir is dir2
+      aggregate: 
+        nested_file_count is file_count
+        nest: files_list_detail is {
+          where: parents.depth_from_parent = 3
+          group_by: file_name is short_name, file_size
+        }
+      limit: 10
+      nest: sub_dirs is {
+        group_by: dir is dir3
+        aggregate: 
+          nested_file_count is file_count
+        nest: files_list_detail is {
+          where: parents.depth_from_parent = 4
+          group_by: file_name is short_name, file_size
+        }
+        limit: 10
+      }
+    }
   }
 }

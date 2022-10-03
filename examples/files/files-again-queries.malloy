@@ -9,43 +9,58 @@ query: files_table -> files
 // Name: directories
 query: files_table -> dirs
 
-
-// --
-// Name: directories with nested sizes
-
-query: files-> {
-  project: dir.dir_name, dir.local_size, dir.nested_size
-  order_by: nested_size desc
-}
-
 // --
 // Name: largest_directories
 
-query: files-> largest_directories
-
+query: files -> largest_directories
 
 // --
 // Name: largest_directries_biggest_files
 
-query: files-> largest_directries_biggest_files
-
-
-// --
-// Name: largest_directries_biggest_ in typescript
-
-query: files-> largest_directries_biggest_files {
-  where: parent ~ './node_modules/typescript%'
-}
+query: files -> top_files_by_dir
 
 // --
-// Name: most typescript files
+// Name: largest_directries_biggest in typescript
 
-query: files ->  {
+query: files -> top_files_by_dir + {
   where: extension = 'ts'
-  group_by: parent
-  aggregate: 
-    file_count 
-    total_size
-    avg_size is file_size.avg()
-  nest: by_file + {limit: 10}
 }
+
+// --
+// Name: direcories with most typescript files.
+
+query: files -> top_files_by_dir + {
+  where: extension = 'ts'
+  order_by: file_count desc
+}
+
+// --
+// Name: tree view
+
+query: files -> tree_view + {
+  where: parents.parent_name = './packages/'
+}
+
+// --
+// Name: where are the typescript files, tree view
+
+query: files-> tree_view + {
+  where:  extension = 'ts'
+}
+
+// -- 
+// Name: File extension Graph
+query: files -> {
+  where: parents.parent_name = './packages/'
+  nest: by_extension_bar_chart is by_extension 
+}
+
+// -- 
+// Name: File extension Graph trellesed
+query: files -> {
+  where: parents.parent_name = './packages/'
+  group_by: dir1
+  aggregate: file_count
+  nest: by_extension_bar_chart is by_extension 
+}
+
