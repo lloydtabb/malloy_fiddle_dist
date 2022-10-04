@@ -2,7 +2,7 @@
   {
     "name": "Filesystem Better",
     "dataTables": ["f.csv"],
-    "modelPath": "./files-again.malloy",
-    "queryPath": "./files-again-queries.malloy"
+    "modelPath": "./files.malloy",
+    "queryPath": "./files-queries.malloy"
   }
 ]
