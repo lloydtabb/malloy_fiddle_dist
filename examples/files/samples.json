@@ -4,11 +4,5 @@
     "dataTables": ["f.csv"],
     "modelPath": "./files-again.malloy",
     "queryPath": "./files-again-queries.malloy"
-  },
-  {
-    "name": "Filesystem Summary",
-    "dataTables": ["f.csv"],
-    "modelPath": "./files.malloy",
-    "queryPath": "./files-queries.malloy"
   }
 ]

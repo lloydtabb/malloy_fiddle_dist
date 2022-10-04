@@ -1,13 +1,16 @@
+--! styles files.styles.json
 //
 // create f.csv with
 // 
-//  find .  -printf "%p,%k,%y\n" > f.csv
+// find .  -printf "%p,%k,%y,%TF %TT\n"  > f.csv
 //
 source: files_table is table('duckdb:f.csv') {
 
   rename: file_name is column0
   rename: file_size is column1
   dimension: is_dir is column2 = 'd'
+  dimension: create_time is column3::timestamp
+
   dimension: parent is reverse(substr(reverse(file_name),
     instr(reverse(file_name),'/')))::string
   dimension: extension is regexp_extract(file_name, '[^/]\.([^.]*)$',1)
@@ -132,5 +135,20 @@ source: files is files_table {
         limit: 10
       }
     }
+  }
+
+  query: by_day is {
+    group_by: create_day is create_time.day
+    aggregate: file_count
+  }
+
+  query: most_recent_changes is {
+    where: not is_dir
+    project: 
+      create_time
+      file_name
+      file_size
+    order_by: 1 desc
+    limit: 100
   }
 }

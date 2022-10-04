@@ -1,3 +1,5 @@
+--! styles files.styles.json
+
 import "files-again.malloy"
 
 // --
@@ -12,6 +14,10 @@ query: files_table -> dirs
 // --
 // Name: largest_directories
 
+// BUG: DuckDB WASM - Symmetric aggregates are computing incorrectly
+//  works correctly in the native version.
+//  https://github.com/looker-open-source/malloy/issues/845
+//
 query: files -> largest_directories
 
 // --
@@ -63,4 +69,8 @@ query: files -> {
   aggregate: file_count
   nest: by_extension_bar_chart is by_extension 
 }
+
+// -- 
+// Name: recent changes
+query: files -> most_recent_changes 
 
