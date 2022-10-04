@@ -25,7 +25,7 @@ The Social Security Administration collects baby first names and genders by stat
 ### [File System Fiddle](https://lloydtabb.github.io/malloy_fiddle_dist/examples/files/index.html)
 Shows how to model hierarchical data.  Creates a reasonable interface to the ways you might want to 
 query it.
- [Source Code in Github Repository]https://github.com/lloydtabb/malloy_fiddle_dist/tree/main/examples/files) 
+ [Source Code in Github Repository](https://github.com/lloydtabb/malloy_fiddle_dist/tree/main/examples/files) 
 
 
 ## Making a Fiddle using Github Pages
