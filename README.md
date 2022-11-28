@@ -12,7 +12,7 @@ Github allows you to host web pages so it is perfect for this.  You can create a
 
 Here are some examples running on Github
 
-### [NTSB Example Fiddle](https://looker-open-source.github.io/malloy/fiddle/index.html?q=12+-+Line+Chart+with+two+dimension%3A+Flights+by+Month+and+Length&m=Flights&t=)
+### [NTSB Example Fiddle](https://malloydata.github.io/malloy/fiddle/index.html?q=12+-+Line+Chart+with+two+dimension%3A+Flights+by+Month+and+Length&m=Flights&t=)
 Extract of NTSB flight data from 2000-2005.  Shows how to join data and biild dashboards
 
 ### [IMDB Fiddle](https://lloydtabb.github.io/imdb_fiddle/index.html)
@@ -26,7 +26,7 @@ The Social Security Administration collects baby first names and genders by stat
 Shows how to model hierarchical data.  Creates a reasonable interface to the ways you might want to 
 query it.
 
-### [Auto Recall Fiddle](https://looker-open-source.github.io/malloy/fiddle/index.html?q=1+-+Recent+Honda+Recalls&m=Auto+Recalls&t=)
+### [Auto Recall Fiddle](https://malloydata.github.io/malloy/fiddle/index.html?q=1+-+Recent+Honda+Recalls&m=Auto+Recalls&t=)
 Uses just a CSV with a list of all the recalls since the  1970's
 
 
